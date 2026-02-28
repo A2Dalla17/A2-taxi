@@ -9,7 +9,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/richxcame/ride-hailing/internal/onboarding"
 	"github.com/richxcame/ride-hailing/internal/pool"
+	"github.com/richxcame/ride-hailing/internal/pricing"
 	"github.com/richxcame/ride-hailing/internal/ridetypes"
+	"github.com/richxcame/ride-hailing/internal/scheduling"
 	"github.com/richxcame/ride-hailing/pkg/logger"
 	"github.com/richxcame/ride-hailing/pkg/models"
 	"github.com/richxcame/ride-hailing/pkg/storage"
@@ -154,6 +156,26 @@ func (s *stubDriverService) GetDriverByUserID(_ context.Context, userID uuid.UUI
 	logger.Warn("stubDriverService.GetDriverByUserID called — documents handler doesn't need this for driver endpoints",
 		zap.String("user_id", userID.String()))
 	return nil, fmt.Errorf("driver service not configured for documents")
+}
+
+// ---- Scheduling PricingService adapter ----
+// Adapts pricing.Service.GetEstimate to the scheduling.PricingService interface.
+
+type schedulingPricingAdapter struct {
+	svc *pricing.Service
+}
+
+func (a *schedulingPricingAdapter) EstimateFare(ctx context.Context, pickup, dropoff scheduling.Location, rideType string) (float64, error) {
+	resp, err := a.svc.GetEstimate(ctx, pricing.EstimateRequest{
+		PickupLatitude:   pickup.Latitude,
+		PickupLongitude:  pickup.Longitude,
+		DropoffLatitude:  dropoff.Latitude,
+		DropoffLongitude: dropoff.Longitude,
+	})
+	if err != nil {
+		return 0, err
+	}
+	return resp.EstimatedFare, nil
 }
 
 // ---- RideTypes Service Adapter (for pricing bulk estimates) ----

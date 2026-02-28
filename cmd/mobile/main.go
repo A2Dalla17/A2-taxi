@@ -44,6 +44,8 @@ import (
 	"github.com/richxcame/ride-hailing/internal/ridetypes"
 	"github.com/richxcame/ride-hailing/internal/rides"
 	"github.com/richxcame/ride-hailing/internal/safety"
+	"github.com/richxcame/ride-hailing/internal/scheduler"
+	"github.com/richxcame/ride-hailing/internal/scheduling"
 	"github.com/richxcame/ride-hailing/internal/subscriptions"
 	"github.com/richxcame/ride-hailing/internal/support"
 	"github.com/richxcame/ride-hailing/internal/tips"
@@ -240,6 +242,7 @@ func main() {
 	safetyRepo := safety.NewRepository(db)
 	rideTypesRepo := ridetypes.NewRepository(db)
 	documentsRepo := documents.NewRepository(db)
+	schedulingRepo := scheduling.NewRepository(db)
 
 	// Initialize services
 	ridesService := rides.NewService(ridesRepo, promosServiceURL, nil) // CircuitBreaker is nil-safe
@@ -312,6 +315,7 @@ func main() {
 		AllowedMimeTypes: []string{"image/jpeg", "image/png", "application/pdf"},
 		OCREnabled:       false,
 	})
+	schedulingService := scheduling.NewService(schedulingRepo, &schedulingPricingAdapter{svc: pricingService})
 
 	// Initialize handlers
 	ridesHandler := rides.NewHandler(ridesService)
@@ -350,6 +354,7 @@ func main() {
 	rideTypesHandler := ridetypes.NewHandler(rideTypesService)
 	safetyHandler := safety.NewHandler(safetyService)
 	documentsHandler := documents.NewHandler(documentsService, &stubDriverService{})
+	schedulingHandler := scheduling.NewHandler(schedulingService)
 
 	// Set up Gin router
 	router := gin.New()
@@ -469,6 +474,11 @@ func main() {
 	rideTypesHandler.RegisterRoutes(apiGroup)
 	safetyHandler.RegisterRoutes(apiGroup)
 	documentsHandler.RegisterRoutesOnGroup(apiGroup)
+	schedulingHandler.RegisterRoutesOnGroup(apiGroup)
+
+	// Start scheduler worker (background: processes scheduled rides, expires stale rides, refreshes analytics)
+	schedulerWorker := scheduler.NewWorker(db, logger.Get(), getEnv("NOTIFICATIONS_SERVICE_URL", ""))
+	go schedulerWorker.Start(ctx)
 
 	// Create HTTP server with timeouts
 	srv := &http.Server{

@@ -10637,6 +10637,350 @@
       "name": "Notifications"
     },
     {
+      "name": "Scheduling",
+      "item": [
+        {
+          "name": "Recurring Rides",
+          "item": [
+            {
+              "name": "Create Recurring Ride",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/recurring-rides",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "recurring-rides"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Morning Commute\",\n  \"pickup_location\": {\n    \"latitude\": 37.7749,\n    \"longitude\": -122.4194\n  },\n  \"dropoff_location\": {\n    \"latitude\": 37.7849,\n    \"longitude\": -122.4094\n  },\n  \"pickup_address\": \"123 Home St\",\n  \"dropoff_address\": \"456 Office Ave\",\n  \"ride_type\": \"economy\",\n  \"recurrence_pattern\": \"weekdays\",\n  \"scheduled_time\": \"08:30\",\n  \"timezone\": \"America/Los_Angeles\",\n  \"start_date\": \"2026-03-01\",\n  \"reminder_minutes\": 30\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "List Recurring Rides",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/recurring-rides?status=active&page=1&page_size=20",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "recurring-rides"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "active"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "20"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Recurring Ride",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/recurring-rides/{{recurring_ride_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "recurring-rides",
+                    "{{recurring_ride_id}}"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Recurring Ride",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/recurring-rides/{{recurring_ride_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "recurring-rides",
+                    "{{recurring_ride_id}}"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scheduled_time\": \"09:00\",\n  \"reminder_minutes\": 15\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "Pause Recurring Ride",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/recurring-rides/{{recurring_ride_id}}/pause",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "recurring-rides",
+                    "{{recurring_ride_id}}",
+                    "pause"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Resume Recurring Ride",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/recurring-rides/{{recurring_ride_id}}/resume",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "recurring-rides",
+                    "{{recurring_ride_id}}",
+                    "resume"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Cancel Recurring Ride",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/recurring-rides/{{recurring_ride_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "recurring-rides",
+                    "{{recurring_ride_id}}"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Instances",
+          "item": [
+            {
+              "name": "Get Upcoming Instances",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/instances?days=7",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "instances"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "7"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Skip Instance",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/instances/{{instance_id}}/skip",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "instances",
+                    "{{instance_id}}",
+                    "skip"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"Working from home\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "Reschedule Instance",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/scheduling/instances/{{instance_id}}/reschedule",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "scheduling",
+                    "instances",
+                    "{{instance_id}}",
+                    "reschedule"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"new_date\": \"2026-03-05\",\n  \"new_time\": \"09:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Preview Schedule",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/scheduling/preview",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scheduling",
+                "preview"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recurrence_pattern\": \"weekdays\",\n  \"scheduled_time\": \"08:30\",\n  \"start_date\": \"2026-03-01\",\n  \"end_date\": \"2026-03-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/scheduling/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scheduling",
+                "stats"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "item": [
         {
           "name": "Get Dashboard",

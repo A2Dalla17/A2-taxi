@@ -387,24 +387,34 @@ func (h *Handler) RegisterRoutes(r *gin.Engine, jwtProvider jwtkeys.KeyProvider)
 	scheduling := r.Group("/api/v1/scheduling")
 	scheduling.Use(middleware.AuthMiddlewareWithProvider(jwtProvider))
 	{
-		// Recurring rides
-		scheduling.POST("/recurring-rides", h.CreateRecurringRide)
-		scheduling.GET("/recurring-rides", h.ListRecurringRides)
-		scheduling.GET("/recurring-rides/:id", h.GetRecurringRide)
-		scheduling.PUT("/recurring-rides/:id", h.UpdateRecurringRide)
-		scheduling.DELETE("/recurring-rides/:id", h.CancelRecurringRide)
-		scheduling.POST("/recurring-rides/:id/pause", h.PauseRecurringRide)
-		scheduling.POST("/recurring-rides/:id/resume", h.ResumeRecurringRide)
-
-		// Instances
-		scheduling.GET("/instances", h.GetUpcomingInstances)
-		scheduling.POST("/instances/:id/skip", h.SkipInstance)
-		scheduling.POST("/instances/:id/reschedule", h.RescheduleInstance)
-
-		// Preview
-		scheduling.POST("/preview", h.PreviewSchedule)
-
-		// Stats
-		scheduling.GET("/stats", h.GetStats)
+		h.registerEndpoints(scheduling)
 	}
+}
+
+// RegisterRoutesOnGroup registers scheduling routes on an existing authenticated group
+func (h *Handler) RegisterRoutesOnGroup(rg *gin.RouterGroup) {
+	scheduling := rg.Group("/scheduling")
+	h.registerEndpoints(scheduling)
+}
+
+func (h *Handler) registerEndpoints(scheduling *gin.RouterGroup) {
+	// Recurring rides
+	scheduling.POST("/recurring-rides", h.CreateRecurringRide)
+	scheduling.GET("/recurring-rides", h.ListRecurringRides)
+	scheduling.GET("/recurring-rides/:id", h.GetRecurringRide)
+	scheduling.PUT("/recurring-rides/:id", h.UpdateRecurringRide)
+	scheduling.DELETE("/recurring-rides/:id", h.CancelRecurringRide)
+	scheduling.POST("/recurring-rides/:id/pause", h.PauseRecurringRide)
+	scheduling.POST("/recurring-rides/:id/resume", h.ResumeRecurringRide)
+
+	// Instances
+	scheduling.GET("/instances", h.GetUpcomingInstances)
+	scheduling.POST("/instances/:id/skip", h.SkipInstance)
+	scheduling.POST("/instances/:id/reschedule", h.RescheduleInstance)
+
+	// Preview
+	scheduling.POST("/preview", h.PreviewSchedule)
+
+	// Stats
+	scheduling.GET("/stats", h.GetStats)
 }
