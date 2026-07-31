@@ -5,7 +5,6 @@
   "framework": "vite",
   "rewrites": [
     {
-      "comment": "SPA fallback. React Router owns the URL, so every path that is not a real file must serve index.html \u2014 otherwise refreshing on /admin/users returns 404.",
       "source": "/((?!api/|assets/|.*\\.).*)",
       "destination": "/index.html"
     }
