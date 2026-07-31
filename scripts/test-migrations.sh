@@ -59,7 +59,7 @@ DB_NAME=${DB_NAME:-ridehailing}
 TEST_DB_NAME="${DB_NAME}_test_migrations"
 
 # Migration directory
-MIGRATION_DIR="db/migrations"
+MIGRATION_DIR="database/migrations"
 
 # Logging functions
 log_info() {

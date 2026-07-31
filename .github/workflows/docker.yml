@@ -46,7 +46,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./backend
           file: ./Dockerfile
           build-args: |
             SERVICE_NAME=${{ matrix.service }}

@@ -1,0 +1,37 @@
+{
+  "name": "ac7-taxi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AC7 Ride — enterprise ride-hailing platform. Go microservices backend, React frontend.",
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "preview": "npm run preview --workspace frontend",
+    "typecheck": "npm run typecheck --workspace frontend",
+    "install:frontend": "npm install --workspace frontend",
+    "backend:build": "cd backend && go build ./...",
+    "backend:test": "cd backend && go test ./...",
+    "backend:vet": "cd backend && go vet ./...",
+    "backend:up": "docker compose --env-file backend/.env -f deploy/docker-compose.yml -f deploy/docker-compose.supabase.yml up -d redis nats kong auth-service",
+    "backend:up:full": "docker compose --env-file backend/.env -f deploy/docker-compose.yml -f deploy/docker-compose.supabase.yml up -d redis nats kong auth-service rides-service geo-service payments-service",
+    "backend:down": "docker compose -f deploy/docker-compose.yml down",
+    "backend:logs": "docker compose -f deploy/docker-compose.yml logs -f auth-service",
+    "backend:status": "docker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"",
+    "backend:health": "curl -s http://localhost:8000/api/v1/auth/healthz",
+    "stack:up": "docker compose -f deploy/docker-compose.yml up -d",
+    "stack:down": "docker compose -f deploy/docker-compose.yml down",
+    "stack:dev": "docker compose -f deploy/docker-compose.dev.yml up -d",
+    "stack:logs": "docker compose -f deploy/docker-compose.yml logs -f",
+    "db:migrate": "cd backend && make migrate-up",
+    "db:status": "cd backend && make migrate-version"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.6"
+  }
+}

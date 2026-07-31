@@ -29,8 +29,8 @@ fi
 echo "Checking migration naming convention..."
 
 for file in "$@"; do
-    # Only check files in db/migrations directory
-    if [[ ! "$file" =~ ^db/migrations/ ]]; then
+    # Only check files in database/migrations directory
+    if [[ ! "$file" =~ ^database/migrations/ ]]; then
         continue
     fi
 
@@ -48,19 +48,19 @@ for file in "$@"; do
     version=$(echo "$filename" | cut -d'_' -f1)
 
     # Check if both UP and DOWN migrations exist
-    up_file="db/migrations/${version}_*.up.sql"
-    down_file="db/migrations/${version}_*.down.sql"
+    up_file="database/migrations/${version}_*.up.sql"
+    down_file="database/migrations/${version}_*.down.sql"
 
     # Check for matching pair
     if [[ "$filename" =~ \.up\.sql$ ]]; then
         corresponding_down=$(echo "$filename" | sed 's/\.up\.sql$/.down.sql/')
-        if [ ! -f "db/migrations/$corresponding_down" ]; then
+        if [ ! -f "database/migrations/$corresponding_down" ]; then
             log_error "Missing corresponding DOWN migration for: $filename"
             continue
         fi
     elif [[ "$filename" =~ \.down\.sql$ ]]; then
         corresponding_up=$(echo "$filename" | sed 's/\.down\.sql$/.up.sql/')
-        if [ ! -f "db/migrations/$corresponding_up" ]; then
+        if [ ! -f "database/migrations/$corresponding_up" ]; then
             log_error "Missing corresponding UP migration for: $filename"
             continue
         fi
@@ -74,7 +74,7 @@ if [ $ERRORS -gt 0 ]; then
     echo -e "${RED}Migration naming check failed with $ERRORS error(s)${NC}"
     echo ""
     echo "Migration Naming Convention:"
-    echo "  - Files must be in db/migrations/ directory"
+    echo "  - Files must be in database/migrations/ directory"
     echo "  - Format: NNNNNN_description.up.sql and NNNNNN_description.down.sql"
     echo "  - Version: 6 digits (e.g., 000001, 000002, ...)"
     echo "  - Description: lowercase with underscores (e.g., create_users_table)"

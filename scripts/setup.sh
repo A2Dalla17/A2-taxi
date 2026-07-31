@@ -79,7 +79,7 @@ echo -e "${YELLOW}📊 Running database migrations...${NC}"
 
 # Check if migrate is installed
 if command -v migrate &> /dev/null; then
-    migrate -path db/migrations \
+    migrate -path database/migrations \
       -database "postgresql://postgres:postgres@localhost:5432/ridehailing?sslmode=disable" \
       up
     echo -e "${GREEN}✓ Migrations completed${NC}"
